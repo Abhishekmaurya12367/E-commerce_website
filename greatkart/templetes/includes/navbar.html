@@ -39,13 +39,14 @@
 <i class="fa fa-bars"></i> All category
 </button>
 <div class="dropdown-menu">
-<a class="dropdown-item" href="#">Machinery</a>
-<a class="dropdown-item" href="#">Electronics</a>
-<a class="dropdown-item" href="#">Automobile</a>
-<a class="dropdown-item" href="#">Fashion</a>
-<a class="dropdown-item" href="#">Home & Garden</a>
-<a class="dropdown-item" href="#">Beauty</a>
+    {% for category in links %}
+        <a class="dropdown-item" href="{{ category.get_url }}">
+            {{ category.category_name }}
+        </a>
+    {% endfor %}
 </div>
+
+
 </div>
 </div>
 <a href="{% url 'store' %}">Store</a>
