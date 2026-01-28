@@ -1,7 +1,18 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-
+{% if not cart_items %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h3>There is no item</h3>
+            <a href="{% url 'store' %}" class="btn btn-primary mt-3">
+                Continue Shopping
+            </a>
+        </div>
+    </div>
+</div>
+{% else %}
 <section class="section-content padding-y bg">
 <div class="container">
 
@@ -37,9 +48,9 @@
 						<td>
 							<div class="input-group input-spinner">
 								<div class="input-group-prepend">
-									<button class="btn btn-light" type="button">
+									<a href="{% url 'remove_cart' cart_item.product.id %}" class="btn btn-light" type="button">
 										<i class="fa fa-minus"></i>
-									</button>
+									</a>
 								</div>
 
 								<input type="text" class="form-control" value="{{ cart_item.quantity }}">
@@ -60,7 +71,7 @@
 						</td>
 
 						<td class="text-right">
-							<a href="#" class="btn btn-danger">Remove</a>
+							<a href="{% url 'remove_item' cart_item.product.id %}" class="btn btn-danger">Remove</a>
 						</td>
 					</tr>
 				{% empty %}
@@ -76,25 +87,44 @@
 	</aside>
 
 	<aside class="col-lg-3">
-		<div class="card">
-			<div class="card-body">
-				<dl class="dlist-align">
-					<dt>Total price:</dt>
-					<dd class="text-right">₹{{ total }}</dd>
-				</dl>
-				<dl class="dlist-align">
-					<dt>Total items:</dt>
-					<dd class="text-right">{{ quantity }}</dd>
-				</dl>
-				<hr>
-				<a href="#" class="btn btn-primary btn-block">Checkout</a>
-				<a href="{% url 'store' %}" class="btn btn-light btn-block">
-					Continue Shopping
-				</a>
-			</div>
+	<div class="card">
+		<div class="card-body">
+			<dl class="dlist-align">
+				<dt>Total price:</dt>
+				<dd class="text-right">₹{{ total }}</dd>
+			</dl>
+
+			<dl class="dlist-align">
+				<dt>Tax (2% GST):</dt>
+				<dd class="text-right">₹{{ tax }}</dd>
+			</dl>
+
+			<dl class="dlist-align">
+				<dt>Total items:</dt>
+				<dd class="text-right">{{ quantity }}</dd>
+			</dl>
+
+			<hr>
+
+			<dl class="dlist-align">
+				<dt><strong>Grand Total:</strong></dt>
+				<dd class="text-right">
+					<strong>₹{{ grand_total }}</strong>
+				</dd>
+			</dl>
+
+			<hr>
+
+			<a href="#" class="btn btn-primary btn-block">Checkout</a>
+			<a href="{% url 'store' %}" class="btn btn-light btn-block">
+				Continue Shopping
+			</a>
 		</div>
-	</aside>
+	</div>
+</aside>
+
 </div>
+{%endif%}
 
 </div>
 </section>
