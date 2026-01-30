@@ -3,19 +3,29 @@ from .models import Product
 from category.models import Category
 from cart.models import CartItem
 from cart.views import _cart_id
+from django.core.paginator import Paginator
 
 def store(request, category_slug=None):
     category = None
-    products = Product.objects.filter(is_available=True)
+    products = None
 
-    if category_slug:
+    if category_slug!=None:
         category = get_object_or_404(Category, slug=category_slug)
         products = Product.objects.filter(category=category, is_available=True)
-
-    product_count = products.count()
+        paginator = Paginator(products,1)   # ✅ always created
+        page = request.GET.get('page')
+        paged_products = paginator.get_page(page)
+        product_count = products.count()
+    else:
+        products = Product.objects.all().filter(is_available=True)
+        paginator = Paginator(products, 3)   # ✅ always created
+        page = request.GET.get('page')
+        paged_products = paginator.get_page(page)
+        product_count = products.count()
+    
 
     context = {
-        'products': products,
+        'products': paged_products,
         'product_count': product_count,
         'category': category,
     }
