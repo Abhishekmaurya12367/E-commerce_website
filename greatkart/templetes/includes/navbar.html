@@ -52,11 +52,11 @@
 <a href="{% url 'store' %}">Store</a>
 
 <div class="col-lg col-md-6 col-sm-12 col">
-<form class="search">
+<form action="{%url 'search'%}"class="search" methode='GET'>
 <div class="input-group w-100">
-<input type="text" class="form-control" placeholder="Search">
+<input type="text" class="form-control" placeholder="Search" name="keyword">
 <div class="input-group-append">
-<button class="btn btn-primary"><i class="fa fa-search"></i></button>
+<button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
 </div>
 </div>
 </form>
