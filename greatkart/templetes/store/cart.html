@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+
 {% if not cart_items %}
 <div class="container">
     <div class="row justify-content-center">
@@ -12,6 +13,7 @@
         </div>
     </div>
 </div>
+
 {% else %}
 <section class="section-content padding-y bg">
 <div class="container">
@@ -31,32 +33,47 @@
 
 				<tbody>
 				{% for cart_item in cart_items %}
-					<tr>
-						<td>
-							<figure class="itemside align-items-center">
-								<div class="aside">
-									<img src="{{ cart_item.product.image.url }}" class="img-sm">
-								</div>
-								<figcaption class="info">
-									<a href="#" class="title text-dark">
-										{{ cart_item.product.product_name }}
-									</a>
-								</figcaption>
-							</figure>
-						</td>
+<tr>
+    <td>
+        <figure class="itemside align-items-center">
+            <div class="aside">
+                {% if cart_item.product.image %}
+                    <img src="{{ cart_item.product.image.url }}" class="img-sm">
+                {% else %}
+                    <img src="{% static 'images/default-product.png' %}" class="img-sm">
+                {% endif %}
+            </div>
 
+            <figcaption class="info">
+                <a href="#" class="title text-dark">
+                    {{ cart_item.product.product_name }}
+                </a>
+
+                <!-- VARIATIONS (Color / Size) -->
+                <p class="text-muted small mb-0">
+                    {% for item in cart_item.variation.all %}
+                        {{ item.variation_category|capfirst }} :
+                        {{ item.variation_value|capfirst }}<br>
+                    {% endfor %}
+                </p>
+            </figcaption>
+        </figure>
+    </td>
 						<td>
 							<div class="input-group input-spinner">
 								<div class="input-group-prepend">
-									<a href="{% url 'remove_cart' cart_item.product.id %}" class="btn btn-light" type="button">
+									<a href="{% url 'remove_cart' cart_item.product.id %}"
+									   class="btn btn-light">
 										<i class="fa fa-minus"></i>
 									</a>
 								</div>
 
-								<input type="text" class="form-control" value="{{ cart_item.quantity }}">
+								<input type="text" class="form-control"
+									   value="{{ cart_item.quantity }}" readonly>
 
 								<div class="input-group-append">
-									<a href="{% url 'add_cart' cart_item.product.id %}" class="btn btn-light">
+									<a href="{% url 'add_cart' cart_item.product.id %}"
+									   class="btn btn-light">
 										<i class="fa fa-plus"></i>
 									</a>
 								</div>
@@ -66,12 +83,17 @@
 						<td>
 							<div class="price-wrap">
 								<var class="price">₹{{ cart_item.sub_total }}</var>
-								<small class="text-muted">₹{{ cart_item.product.price }}</small>
+								<small class="text-muted">
+									₹{{ cart_item.product.price }}
+								</small>
 							</div>
 						</td>
 
 						<td class="text-right">
-							<a href="{% url 'remove_item' cart_item.product.id %}" class="btn btn-danger">Remove</a>
+							<a href="{% url 'remove_item' cart_item.product.id %}"
+							   class="btn btn-danger">
+								Remove
+							</a>
 						</td>
 					</tr>
 				{% empty %}
@@ -86,6 +108,7 @@
 		</div>
 	</aside>
 
+	<!-- PRICE SUMMARY -->
 	<aside class="col-lg-3">
 	<div class="card">
 		<div class="card-body">
@@ -121,12 +144,11 @@
 			</a>
 		</div>
 	</div>
-</aside>
+	</aside>
 
 </div>
-{%endif%}
-
 </div>
 </section>
+{% endif %}
 
 {% endblock %}
