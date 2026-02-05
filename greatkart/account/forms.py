@@ -13,5 +13,5 @@ class RegistrationForm(forms.ModelForm):
             'last_name',
             'phone_number',
             'email',
-            'password'
+            'password'huuu
         ]
